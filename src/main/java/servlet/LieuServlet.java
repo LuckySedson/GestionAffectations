@@ -1,0 +1,74 @@
+package servlet;
+
+import dao.LieuDAO;
+import model.Lieu;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.util.List;
+
+@WebServlet("/lieu")
+public class LieuServlet extends HttpServlet {
+
+    private final LieuDAO lieuDAO = new LieuDAO();
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        String action = req.getParameter("action");
+        if (action == null) action = "liste";
+
+        switch (action) {
+            case "liste":
+                List<Lieu> lieux = lieuDAO.listerTous();
+                req.setAttribute("lieux", lieux);
+                req.getRequestDispatcher("/lieu/liste.jsp").forward(req, resp);
+                break;
+
+            case "formAjout":
+                req.getRequestDispatcher("/lieu/form.jsp").forward(req, resp);
+                break;
+
+            case "formModif":
+                Integer codelieuModif = Integer.parseInt(req.getParameter("codelieu"));
+                req.setAttribute("lieu", lieuDAO.trouverParCode(codelieuModif));
+                req.getRequestDispatcher("/lieu/form.jsp").forward(req, resp);
+                break;
+
+            case "supprimer":
+                Integer codelieuSupp = Integer.parseInt(req.getParameter("codelieu"));
+                lieuDAO.supprimer(codelieuSupp);
+                resp.sendRedirect("lieu?action=liste");
+                break;
+
+            default:
+                resp.sendRedirect("lieu?action=liste");
+        }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+
+        String designation = req.getParameter("designation");
+        String province = req.getParameter("province");
+        String codelieuStr = req.getParameter("codelieu");
+
+        if (codelieuStr == null || codelieuStr.isEmpty()) {
+            Lieu l = new Lieu(designation, province);
+            lieuDAO.ajouter(l);
+        } else {
+            Lieu l = lieuDAO.trouverParCode(Integer.parseInt(codelieuStr));
+            l.setDesignation(designation);
+            l.setProvince(province);
+            lieuDAO.modifier(l);
+        }
+
+        resp.sendRedirect("lieu?action=liste");
+    }
+}

@@ -1,0 +1,14 @@
+# Fichiers compilés par Maven / Java
+target/
+*.class
+
+# Configurations d'IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Fichiers système et logs
+*.log
+.DS_Store
+Thumbs.db
