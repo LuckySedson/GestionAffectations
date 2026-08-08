@@ -258,3 +258,9 @@ form.formulaire button:hover {
 .retour:hover {
     color: #2c7be5;
 }
+
+.banniere.erreur {
+    background-color: #fdecec;
+    color: #b3261e;
+    border: 1px solid #f5b5b2;
+}

@@ -1,6 +1,8 @@
 package servlet;
 
 import dao.EmployeDAO;
+import exception.AccesDonneesException;
+import exception.SuppressionImpossibleException;
 import model.Employe;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -20,41 +22,48 @@ public class EmployeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        String action = req.getParameter("action");
-        if (action == null) action = "liste";
+        try {
+            String action = req.getParameter("action");
+            if (action == null) action = "liste";
 
-        switch (action) {
-            case "liste":
-                List<Employe> employes = employeDAO.listerTous();
-                req.setAttribute("employes", employes);
-                req.getRequestDispatcher("/employe/liste.jsp").forward(req, resp);
-                break;
+            switch (action) {
+                case "liste":
+                    List<Employe> employes = employeDAO.listerTous();
+                    req.setAttribute("employes", employes);
+                    req.getRequestDispatcher("/employe/liste.jsp").forward(req, resp);
+                    break;
 
-            case "formAjout":
-                req.getRequestDispatcher("/employe/form.jsp").forward(req, resp);
-                break;
+                case "formAjout":
+                    req.getRequestDispatcher("/employe/form.jsp").forward(req, resp);
+                    break;
 
-            case "formModif":
-                Integer codeempModif = Integer.parseInt(req.getParameter("codeemp"));
-                req.setAttribute("employe", employeDAO.trouverParCode(codeempModif));
-                req.getRequestDispatcher("/employe/form.jsp").forward(req, resp);
-                break;
+                case "formModif":
+                    Integer codeempModif = Integer.parseInt(req.getParameter("codeemp"));
+                    req.setAttribute("employe", employeDAO.trouverParCode(codeempModif));
+                    req.getRequestDispatcher("/employe/form.jsp").forward(req, resp);
+                    break;
 
-            case "supprimer":
-                Integer codeempSupp = Integer.parseInt(req.getParameter("codeemp"));
-                employeDAO.supprimer(codeempSupp);
-                resp.sendRedirect("employe?action=liste&msg=suppr");
-                break;
+                case "supprimer":
+                    Integer codeempSupp = Integer.parseInt(req.getParameter("codeemp"));
+                    employeDAO.supprimer(codeempSupp);
+                    resp.sendRedirect("employe?action=liste&msg=suppr");
+                    break;
 
-            case "recherche":
-                String critere = req.getParameter("critere");
-                List<Employe> resultats = employeDAO.trouverParNom(critere);
-                req.setAttribute("employes", resultats);
-                req.getRequestDispatcher("/employe/liste.jsp").forward(req, resp);
-                break;
+                case "recherche":
+                    String critere = req.getParameter("critere");
+                    List<Employe> resultats = employeDAO.trouverParNom(critere);
+                    req.setAttribute("employes", resultats);
+                    req.getRequestDispatcher("/employe/liste.jsp").forward(req, resp);
+                    break;
 
-            default:
-                resp.sendRedirect("employe?action=liste");
+                default:
+                    resp.sendRedirect("employe?action=liste");
+            }
+        } catch (SuppressionImpossibleException ex) {
+            resp.sendRedirect("employe?action=liste&msg=occupe");
+        } catch (AccesDonneesException ex) {
+            req.setAttribute("erreur", ex.getMessage());
+            req.getRequestDispatcher("/error.jsp").forward(req, resp);
         }
     }
 
@@ -62,25 +71,31 @@ public class EmployeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        String nom = req.getParameter("nom");
-        String prenom = req.getParameter("prenom");
-        String poste = req.getParameter("poste");
-        String codeempStr = req.getParameter("codeemp");
+        try {
+            String nom = req.getParameter("nom");
+            String prenom = req.getParameter("prenom");
+            String poste = req.getParameter("poste");
+            String codeempStr = req.getParameter("codeemp");
 
-        String msg;
-        if (codeempStr == null || codeempStr.isEmpty()) {
-            Employe e = new Employe(nom, prenom, poste);
-            employeDAO.ajouter(e);
-            msg = "ajout";
-        } else {
-            Employe e = employeDAO.trouverParCode(Integer.parseInt(codeempStr));
-            e.setNom(nom);
-            e.setPrenom(prenom);
-            e.setPoste(poste);
-            employeDAO.modifier(e);
-            msg = "modif";
+            String msg;
+            if (codeempStr == null || codeempStr.isEmpty()) {
+                Employe e = new Employe(nom, prenom, poste);
+                employeDAO.ajouter(e);
+                msg = "ajout";
+            } else {
+                Employe e = employeDAO.trouverParCode(Integer.parseInt(codeempStr));
+                e.setNom(nom);
+                e.setPrenom(prenom);
+                e.setPoste(poste);
+                employeDAO.modifier(e);
+                msg = "modif";
+            }
+
+            resp.sendRedirect("employe?action=liste&msg=" + msg);
+
+        } catch (AccesDonneesException ex) {
+            req.setAttribute("erreur", ex.getMessage());
+            req.getRequestDispatcher("/error.jsp").forward(req, resp);
         }
-
-        resp.sendRedirect("employe?action=liste&msg=" + msg);
     }
 }

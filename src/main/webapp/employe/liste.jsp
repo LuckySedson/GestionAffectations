@@ -18,6 +18,7 @@
                 <input type="hidden" name="action" value="recherche"/>
                 <input type="text" name="critere" placeholder="Rechercher par nom"/>
                 <button type="submit" class="btn">Rechercher</button>
+                <a href="${pageContext.request.contextPath}/employe?action=liste" class="btn" style="background-color:#6b7280;">↻ Actualiser</a>
             </form>
             <a href="${pageContext.request.contextPath}/employe?action=formAjout" class="btn">+ Ajouter un employé</a>
         </div>

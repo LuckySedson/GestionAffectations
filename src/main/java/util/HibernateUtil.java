@@ -8,25 +8,25 @@ import org.slf4j.LoggerFactory;
 public class HibernateUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(HibernateUtil.class);
+    private static SessionFactory sessionFactory;
 
-    private static final SessionFactory sessionFactory = buildSessionFactory();
-
-    private static SessionFactory buildSessionFactory() {
-        try {
-            return new Configuration()
-                    .configure("hibernate.cfg.xml")
-                    .buildSessionFactory();
-        } catch (Throwable ex) {
-            logger.error("La création de la SessionFactory a échoué.", ex);
-            throw new ExceptionInInitializerError(ex);
+    public static synchronized SessionFactory getSessionFactory() {
+        if (sessionFactory == null || sessionFactory.isClosed()) {
+            try {
+                sessionFactory = new Configuration()
+                        .configure("hibernate.cfg.xml")
+                        .buildSessionFactory();
+            } catch (Throwable ex) {
+                logger.error("La création de la SessionFactory a échoué.", ex);
+                throw ex;
+            }
         }
-    }
-
-    public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
 
     public static void shutdown() {
-        getSessionFactory().close();
+        if (sessionFactory != null) {
+            sessionFactory.close();
+        }
     }
 }

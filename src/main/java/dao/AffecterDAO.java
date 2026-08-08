@@ -1,5 +1,6 @@
 package dao;
 
+import exception.AccesDonneesException;
 import model.Affecter;
 import model.AffecterId;
 import model.Employe;
@@ -32,7 +33,7 @@ public class AffecterDAO {
             tx.commit();
         } catch (RuntimeException ex) {
             if (tx != null) tx.rollback();
-            throw ex;
+            throw new AccesDonneesException("Impossible d'ajouter l'affectation.", ex);
         }
     }
 
@@ -48,7 +49,7 @@ public class AffecterDAO {
             tx.commit();
         } catch (RuntimeException ex) {
             if (tx != null) tx.rollback();
-            throw ex;
+            throw new AccesDonneesException("Impossible de supprimer l'affectation.", ex);
         }
     }
 
@@ -64,6 +65,8 @@ public class AffecterDAO {
             Query<Affecter> query = session.createQuery(
                     "SELECT a FROM Affecter a JOIN FETCH a.employe JOIN FETCH a.lieu", Affecter.class);
             return query.getResultList();
+        } catch (RuntimeException ex) {
+            throw new AccesDonneesException("Impossible de contacter la base de données.", ex);
         }
     }
 

@@ -1,10 +1,11 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:if test="${not empty param.msg}">
-    <div class="banniere succes">
+    <div class="banniere ${param.msg == 'occupe' ? 'erreur' : 'succes'}">
         <c:choose>
             <c:when test="${param.msg == 'ajout'}">✅ Ajout effectué avec succès.</c:when>
             <c:when test="${param.msg == 'modif'}">✅ Modification effectuée avec succès.</c:when>
             <c:when test="${param.msg == 'suppr'}">✅ Suppression effectuée avec succès.</c:when>
+            <c:when test="${param.msg == 'occupe'}">⚠️ Suppression impossible : cet élément est utilisé dans une ou plusieurs affectations.</c:when>
         </c:choose>
     </div>
 </c:if>
