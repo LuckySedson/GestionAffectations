@@ -148,31 +148,56 @@ tr:hover {
     background-color: #f5f9ff;
 }
 
+/* Boutons d'action (Modifier / Supprimer) dans les tableaux */
 a.action-link {
     display: inline-block;
-    padding: 5px 10px;
-    border-radius: 5px;
-    color: #2c7be5;
+    padding: 6px 14px;
+    border-radius: 6px;
     text-decoration: none;
     margin-right: 6px;
     font-size: 13px;
     font-weight: 600;
-    border: 1px solid transparent;
+    border: 1.5px solid #2c7be5;
+    color: #2c7be5;
+    background-color: white;
     transition: all 0.15s ease;
 }
 
 a.action-link:hover {
-    background-color: #eaf2fe;
-    border-color: #2c7be5;
+    background-color: #2c7be5;
+    color: white;
+    box-shadow: 0 3px 8px rgba(44,123,229,0.3);
+    transform: translateY(-1px);
 }
 
 a.action-link.delete {
+    border-color: #e5484d;
     color: #e5484d;
 }
 
 a.action-link.delete:hover {
-    background-color: #fdecec;
-    border-color: #e5484d;
+    background-color: #e5484d;
+    color: white;
+    box-shadow: 0 3px 8px rgba(229,72,77,0.3);
+}
+
+.btn-accueil {
+    display: inline-block;
+    padding: 8px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1.5px solid white;
+    color: white;
+    background-color: transparent;
+    transition: all 0.15s ease;
+}
+
+.btn-accueil:hover {
+    background-color: white;
+    color: #2c3e50;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
 }
 
 form.recherche {
@@ -244,19 +269,6 @@ form.formulaire button:hover {
     background-color: #1c5db8;
     box-shadow: 0 4px 10px rgba(44,123,229,0.35);
     transform: translateY(-1px);
-}
-
-.retour {
-    display: inline-block;
-    margin-top: 22px;
-    color: #6b7280;
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.15s ease;
-}
-
-.retour:hover {
-    color: #2c7be5;
 }
 
 .banniere.erreur {

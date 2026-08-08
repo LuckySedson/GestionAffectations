@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <c:if test="${not empty param.msg}">
     <div class="banniere ${param.msg == 'occupe' ? 'erreur' : 'succes'}">

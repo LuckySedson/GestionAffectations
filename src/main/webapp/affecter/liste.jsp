@@ -6,9 +6,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 </head>
 <body>
-    <header>
-        <h1>Liste des affectations</h1>
-        <div class="sous-titre">Affecter un employé à un lieu, à une date donnée</div>
+    <header style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <h1>Liste des affectations</h1>
+            <div class="sous-titre">Affecter un employé à un lieu, à une date donnée</div>
+        </div>
+        <a class="btn-accueil" href="${pageContext.request.contextPath}/index.jsp">🏠 Accueil</a>
     </header>
     <main>
         <%@ include file="/WEB-INF/jspf/banniere.jspf" %>
@@ -49,8 +52,6 @@
                 </tr>
             </c:forEach>
         </table>
-
-        <a class="retour" href="${pageContext.request.contextPath}/index.jsp">← Accueil</a>
     </main>
 </body>
 </html>

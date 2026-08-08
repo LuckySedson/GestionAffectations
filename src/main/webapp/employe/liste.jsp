@@ -6,9 +6,12 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 </head>
 <body>
-    <header>
-        <h1>Liste des employés</h1>
-        <div class="sous-titre">Consulter, rechercher, ajouter ou modifier un employé</div>
+    <header style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <h1>Liste des employés</h1>
+            <div class="sous-titre">Consulter, rechercher, ajouter ou modifier un employé</div>
+        </div>
+        <a class="btn-accueil" href="${pageContext.request.contextPath}/index.jsp">🏠 Accueil</a>
     </header>
     <main>
         <%@ include file="/WEB-INF/jspf/banniere.jspf" %>
@@ -41,8 +44,6 @@
                 </tr>
             </c:forEach>
         </table>
-
-        <a class="retour" href="${pageContext.request.contextPath}/index.jsp">← Accueil</a>
     </main>
 </body>
 </html>
