@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
 
 @WebServlet("/affecter")
 public class AffecterServlet extends HttpServlet {
@@ -44,7 +43,7 @@ public class AffecterServlet extends HttpServlet {
                 Integer codelieu = Integer.parseInt(req.getParameter("codelieu"));
                 LocalDate date = LocalDate.parse(req.getParameter("date"));
                 affecterDAO.supprimer(codeemp, codelieu, date);
-                resp.sendRedirect("affecter?action=liste");
+                resp.sendRedirect("affecter?action=liste&msg=suppr");
                 break;
 
             default:
@@ -62,6 +61,6 @@ public class AffecterServlet extends HttpServlet {
 
         affecterDAO.ajouter(codeemp, codelieu, date);
 
-        resp.sendRedirect("affecter?action=liste");
+        resp.sendRedirect("affecter?action=liste&msg=ajout");
     }
 }

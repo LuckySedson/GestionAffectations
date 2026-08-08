@@ -43,7 +43,7 @@ public class LieuServlet extends HttpServlet {
             case "supprimer":
                 Integer codelieuSupp = Integer.parseInt(req.getParameter("codelieu"));
                 lieuDAO.supprimer(codelieuSupp);
-                resp.sendRedirect("lieu?action=liste");
+                resp.sendRedirect("lieu?action=liste&msg=suppr");
                 break;
 
             default:
@@ -59,16 +59,19 @@ public class LieuServlet extends HttpServlet {
         String province = req.getParameter("province");
         String codelieuStr = req.getParameter("codelieu");
 
+        String msg;
         if (codelieuStr == null || codelieuStr.isEmpty()) {
             Lieu l = new Lieu(designation, province);
             lieuDAO.ajouter(l);
+            msg = "ajout";
         } else {
             Lieu l = lieuDAO.trouverParCode(Integer.parseInt(codelieuStr));
             l.setDesignation(designation);
             l.setProvince(province);
             lieuDAO.modifier(l);
+            msg = "modif";
         }
 
-        resp.sendRedirect("lieu?action=liste");
+        resp.sendRedirect("lieu?action=liste&msg=" + msg);
     }
 }

@@ -1,13 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Formulaire lieu</title>
+    <title>${empty lieu ? "Ajouter" : "Modifier"} un lieu</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 </head>
 <body>
-    <header><h1>${empty lieu ? "Ajouter" : "Modifier"} un lieu</h1></header>
+    <header>
+        <h1>${empty lieu ? "Ajouter" : "Modifier"} un lieu</h1>
+        <div class="sous-titre">Renseignez les informations ci-dessous</div>
+    </header>
     <main>
-        <form class="formulaire" action="lieu" method="post">
+        <form class="formulaire" action="${pageContext.request.contextPath}/lieu" method="post">
             <input type="hidden" name="codelieu" value="${lieu.codelieu}"/>
 
             <label>Désignation</label>
@@ -19,7 +22,7 @@
             <button type="submit">Enregistrer</button>
         </form>
 
-        <a class="retour" href="lieu?action=liste">← Retour à la liste</a>
+        <a class="retour" href="${pageContext.request.contextPath}/lieu?action=liste">← Retour à la liste</a>
     </main>
 </body>
 </html>

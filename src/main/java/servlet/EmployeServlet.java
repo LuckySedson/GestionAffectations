@@ -43,7 +43,7 @@ public class EmployeServlet extends HttpServlet {
             case "supprimer":
                 Integer codeempSupp = Integer.parseInt(req.getParameter("codeemp"));
                 employeDAO.supprimer(codeempSupp);
-                resp.sendRedirect("employe?action=liste");
+                resp.sendRedirect("employe?action=liste&msg=suppr");
                 break;
 
             case "recherche":
@@ -67,17 +67,20 @@ public class EmployeServlet extends HttpServlet {
         String poste = req.getParameter("poste");
         String codeempStr = req.getParameter("codeemp");
 
+        String msg;
         if (codeempStr == null || codeempStr.isEmpty()) {
             Employe e = new Employe(nom, prenom, poste);
             employeDAO.ajouter(e);
+            msg = "ajout";
         } else {
             Employe e = employeDAO.trouverParCode(Integer.parseInt(codeempStr));
             e.setNom(nom);
             e.setPrenom(prenom);
             e.setPoste(poste);
             employeDAO.modifier(e);
+            msg = "modif";
         }
 
-        resp.sendRedirect("employe?action=liste");
+        resp.sendRedirect("employe?action=liste&msg=" + msg);
     }
 }

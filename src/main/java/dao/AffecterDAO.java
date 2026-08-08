@@ -61,7 +61,8 @@ public class AffecterDAO {
 
     public List<Affecter> listerTous() {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Affecter> query = session.createQuery("FROM Affecter", Affecter.class);
+            Query<Affecter> query = session.createQuery(
+                    "SELECT a FROM Affecter a JOIN FETCH a.employe JOIN FETCH a.lieu", Affecter.class);
             return query.getResultList();
         }
     }
@@ -69,7 +70,8 @@ public class AffecterDAO {
     public List<Affecter> listerParEmploye(Integer codeemp) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Affecter> query = session.createQuery(
-                    "FROM Affecter a WHERE a.employe.codeemp = :codeemp", Affecter.class);
+                    "SELECT a FROM Affecter a JOIN FETCH a.employe JOIN FETCH a.lieu WHERE a.employe.codeemp = :codeemp",
+                    Affecter.class);
             query.setParameter("codeemp", codeemp);
             return query.getResultList();
         }

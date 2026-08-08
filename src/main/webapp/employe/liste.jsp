@@ -2,19 +2,24 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
-    <title>Liste des employés</title>
+    <title>Employés - Gestion des affectations</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 </head>
 <body>
-    <header><h1>Liste des employés</h1></header>
+    <header>
+        <h1>Liste des employés</h1>
+        <div class="sous-titre">Consulter, rechercher, ajouter ou modifier un employé</div>
+    </header>
     <main>
+        <%@ include file="/WEB-INF/jspf/banniere.jspf" %>
+
         <div class="actions">
-            <form class="recherche" action="employe" method="get">
+            <form class="recherche" action="${pageContext.request.contextPath}/employe" method="get">
                 <input type="hidden" name="action" value="recherche"/>
                 <input type="text" name="critere" placeholder="Rechercher par nom"/>
                 <button type="submit" class="btn">Rechercher</button>
             </form>
-            <a href="employe?action=formAjout" class="btn">+ Ajouter un employé</a>
+            <a href="${pageContext.request.contextPath}/employe?action=formAjout" class="btn">+ Ajouter un employé</a>
         </div>
 
         <table>
@@ -28,15 +33,15 @@
                     <td>${emp.prenom}</td>
                     <td>${emp.poste}</td>
                     <td>
-                        <a class="action-link" href="employe?action=formModif&codeemp=${emp.codeemp}">Modifier</a>
-                        <a class="action-link delete" href="employe?action=supprimer&codeemp=${emp.codeemp}"
-                           onclick="return confirm('Confirmer la suppression ?');">Supprimer</a>
+                        <a class="action-link" href="${pageContext.request.contextPath}/employe?action=formModif&codeemp=${emp.codeemp}">Modifier</a>
+                        <a class="action-link delete" href="${pageContext.request.contextPath}/employe?action=supprimer&codeemp=${emp.codeemp}"
+                           onclick="return confirm('Confirmer la suppression de ${emp.nom} ${emp.prenom} ?');">Supprimer</a>
                     </td>
                 </tr>
             </c:forEach>
         </table>
 
-        <a class="retour" href="../index.jsp">← Accueil</a>
+        <a class="retour" href="${pageContext.request.contextPath}/index.jsp">← Accueil</a>
     </main>
 </body>
 </html>
