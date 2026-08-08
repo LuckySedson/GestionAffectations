@@ -49,6 +49,12 @@ public class LieuServlet extends HttpServlet {
                     resp.sendRedirect("lieu?action=liste&msg=suppr");
                     break;
 
+                case "recherche":
+                    String critere = req.getParameter("critere");
+                    req.setAttribute("lieux", lieuDAO.trouverParCritere(critere));
+                    req.getRequestDispatcher("/lieu/liste.jsp").forward(req, resp);
+                    break;
+
                 default:
                     resp.sendRedirect("lieu?action=liste");
             }

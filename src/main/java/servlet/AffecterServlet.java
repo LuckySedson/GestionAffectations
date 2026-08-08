@@ -31,11 +31,24 @@ public class AffecterServlet extends HttpServlet {
 
             switch (action) {
                 case "liste":
-                    req.setAttribute("affectations", affecterDAO.listerTous());
+                    String tri = req.getParameter("tri");
+                    req.setAttribute("affectations", affecterDAO.listerTous(tri));
+                    req.setAttribute("triActuel", tri);
                     req.getRequestDispatcher("/affecter/liste.jsp").forward(req, resp);
                     break;
 
                 case "formAjout":
+                    req.setAttribute("employes", employeDAO.listerTous());
+                    req.setAttribute("lieux", lieuDAO.listerTous());
+                    req.getRequestDispatcher("/affecter/form.jsp").forward(req, resp);
+                    break;
+
+                case "formModif":
+                    Integer ceModif = Integer.parseInt(req.getParameter("codeemp"));
+                    Integer clModif = Integer.parseInt(req.getParameter("codelieu"));
+                    LocalDate dModif = LocalDate.parse(req.getParameter("date"));
+
+                    req.setAttribute("affectation", affecterDAO.trouverParId(ceModif, clModif, dModif));
                     req.setAttribute("employes", employeDAO.listerTous());
                     req.setAttribute("lieux", lieuDAO.listerTous());
                     req.getRequestDispatcher("/affecter/form.jsp").forward(req, resp);
@@ -47,6 +60,12 @@ public class AffecterServlet extends HttpServlet {
                     LocalDate date = LocalDate.parse(req.getParameter("date"));
                     affecterDAO.supprimer(codeemp, codelieu, date);
                     resp.sendRedirect("affecter?action=liste&msg=suppr");
+                    break;
+
+                case "recherche":
+                    String critere = req.getParameter("critere");
+                    req.setAttribute("affectations", affecterDAO.rechercher(critere));
+                    req.getRequestDispatcher("/affecter/liste.jsp").forward(req, resp);
                     break;
 
                 default:
@@ -69,9 +88,23 @@ public class AffecterServlet extends HttpServlet {
             Integer codelieu = Integer.parseInt(req.getParameter("codelieu"));
             LocalDate date = LocalDate.parse(req.getParameter("date"));
 
-            affecterDAO.ajouter(codeemp, codelieu, date);
+            String ancienCodeempStr = req.getParameter("ancienCodeemp");
+            String msg;
 
-            resp.sendRedirect("affecter?action=liste&msg=ajout");
+            if (ancienCodeempStr == null || ancienCodeempStr.isEmpty()) {
+                affecterDAO.ajouter(codeemp, codelieu, date);
+                msg = "ajout";
+            } else {
+                Integer ancienCodeemp = Integer.parseInt(ancienCodeempStr);
+                Integer ancienCodelieu = Integer.parseInt(req.getParameter("ancienCodelieu"));
+                LocalDate ancienneDate = LocalDate.parse(req.getParameter("ancienneDate"));
+
+                affecterDAO.modifier(ancienCodeemp, ancienCodelieu, ancienneDate,
+                        codeemp, codelieu, date);
+                msg = "modif";
+            }
+
+            resp.sendRedirect("affecter?action=liste&msg=" + msg);
 
         } catch (AccesDonneesException ex) {
             req.setAttribute("erreur", ex.getMessage());

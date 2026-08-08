@@ -56,6 +56,17 @@ public class LieuDAO {
         }
     }
 
+    public List<Lieu> trouverParCritere(String critere) {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Lieu> query = session.createQuery(
+                    "FROM Lieu WHERE designation LIKE :c OR province LIKE :c", Lieu.class);
+            query.setParameter("c", "%" + critere + "%");
+            return query.getResultList();
+        } catch (RuntimeException ex) {
+            throw new AccesDonneesException("Impossible de contacter la base de données.", ex);
+        }
+    }
+
     public Lieu trouverParCode(Integer codelieu) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             return session.get(Lieu.class, codelieu);

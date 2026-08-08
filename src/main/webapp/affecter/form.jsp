@@ -2,32 +2,45 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
-    <title>Ajouter une affectation</title>
+    <title>${empty affectation ? "Ajouter" : "Modifier"} une affectation</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 </head>
 <body>
     <header>
-        <h1>Ajouter une affectation</h1>
+        <h1>${empty affectation ? "Ajouter" : "Modifier"} une affectation</h1>
         <div class="sous-titre">Sélectionnez l'employé, le lieu et la date</div>
     </header>
     <main>
         <form class="formulaire" action="${pageContext.request.contextPath}/affecter" method="post">
+
+            <c:if test="${not empty affectation}">
+                <input type="hidden" name="ancienCodeemp" value="${affectation.id.codeemp}"/>
+                <input type="hidden" name="ancienCodelieu" value="${affectation.id.codelieu}"/>
+                <input type="hidden" name="ancienneDate" value="${affectation.id.date}"/>
+            </c:if>
+
             <label>Employé</label>
             <select name="codeemp" required>
                 <c:forEach var="emp" items="${employes}">
-                    <option value="${emp.codeemp}">${emp.nom} ${emp.prenom}</option>
+                    <option value="${emp.codeemp}"
+                        ${not empty affectation && affectation.employe.codeemp == emp.codeemp ? 'selected' : ''}>
+                        ${emp.nom} ${emp.prenom}
+                    </option>
                 </c:forEach>
             </select>
 
             <label>Lieu</label>
             <select name="codelieu" required>
                 <c:forEach var="l" items="${lieux}">
-                    <option value="${l.codelieu}">${l.designation}</option>
+                    <option value="${l.codelieu}"
+                        ${not empty affectation && affectation.lieu.codelieu == l.codelieu ? 'selected' : ''}>
+                        ${l.designation}
+                    </option>
                 </c:forEach>
             </select>
 
             <label>Date</label>
-            <input type="date" name="date" required/>
+            <input type="date" name="date" value="${affectation.id.date}" required/>
 
             <button type="submit">Enregistrer</button>
         </form>

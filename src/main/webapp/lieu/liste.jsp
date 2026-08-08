@@ -14,6 +14,12 @@
         <%@ include file="/WEB-INF/jspf/banniere.jspf" %>
 
         <div class="actions">
+            <form class="recherche" action="${pageContext.request.contextPath}/lieu" method="get">
+                <input type="hidden" name="action" value="recherche"/>
+                <input type="text" name="critere" placeholder="Rechercher par désignation ou province"/>
+                <button type="submit" class="btn">Rechercher</button>
+                <a href="${pageContext.request.contextPath}/lieu?action=liste" class="btn" style="background-color:#6b7280;">↻ Actualiser</a>
+            </form>
             <a href="${pageContext.request.contextPath}/lieu?action=formAjout" class="btn">+ Ajouter un lieu</a>
         </div>
 
