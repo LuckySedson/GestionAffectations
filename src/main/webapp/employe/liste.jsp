@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
@@ -33,34 +33,36 @@
             <a href="${pageContext.request.contextPath}/employe?action=formAjout" class="btn">+ Ajouter un employé</a>
         </div>
 
-        <c:choose>
-            <c:when test="${empty employes}">
-                <div class="vide">
-                    <span class="icone">📭</span>
-                    Aucun employé trouvé.
-                </div>
-            </c:when>
-            <c:otherwise>
-                <table>
-                    <tr>
-                        <th>Code</th><th>Nom</th><th>Prénom</th><th>Poste</th><th>Actions</th>
-                    </tr>
-                    <c:forEach var="emp" items="${employes}">
+        <div class="table-scroll">
+            <c:choose>
+                <c:when test="${empty employes}">
+                    <div class="vide">
+                        <span class="icone">📭</span>
+                        Aucun employé trouvé.
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <table>
                         <tr>
-                            <td>${emp.codeemp}</td>
-                            <td>${emp.nom}</td>
-                            <td>${emp.prenom}</td>
-                            <td>${emp.poste}</td>
-                            <td>
-                                <a class="action-link" href="${pageContext.request.contextPath}/employe?action=formModif&codeemp=${emp.codeemp}">Modifier</a>
-                                <a class="action-link delete" href="${pageContext.request.contextPath}/employe?action=supprimer&codeemp=${emp.codeemp}"
-                                   onclick="return confirm('Confirmer la suppression de ${emp.nom} ${emp.prenom} ?');">Supprimer</a>
-                            </td>
+                            <th>Code</th><th>Nom</th><th>Prénom</th><th>Poste</th><th>Actions</th>
                         </tr>
-                    </c:forEach>
-                </table>
-            </c:otherwise>
-        </c:choose>
+                        <c:forEach var="emp" items="${employes}">
+                            <tr>
+                                <td>${emp.codeemp}</td>
+                                <td>${emp.nom}</td>
+                                <td>${emp.prenom}</td>
+                                <td>${emp.poste}</td>
+                                <td>
+                                    <a class="action-link" href="${pageContext.request.contextPath}/employe?action=formModif&codeemp=${emp.codeemp}">Modifier</a>
+                                    <a class="action-link delete" href="${pageContext.request.contextPath}/employe?action=supprimer&codeemp=${emp.codeemp}"
+                                       onclick="return confirm('Confirmer la suppression de ${emp.nom} ${emp.prenom} ?');">Supprimer</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </table>
+                </c:otherwise>
+            </c:choose>
+        </div>
     </main>
 </body>
 </html>

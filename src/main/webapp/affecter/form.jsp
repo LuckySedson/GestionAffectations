@@ -49,7 +49,7 @@
             <button type="submit">Enregistrer</button>
         </form>
 
-        <a class="retour" href="${pageContext.request.contextPath}/affecter?action=liste">← Retour à la liste</a>
+        <a class="btn-retour" href="${pageContext.request.contextPath}/employe?action=liste">← Retour à la liste</a>
     </main>
 </body>
 </html>

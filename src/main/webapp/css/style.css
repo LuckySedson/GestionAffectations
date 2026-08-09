@@ -1,3 +1,6 @@
+/* ============================================================
+   VARIABLES DE THEME
+   ============================================================ */
 :root {
     --bg: #f4f6f8;
     --bg-card: #ffffff;
@@ -36,9 +39,17 @@
     --shadow: rgba(0,0,0,0.4);
 }
 
+/* ============================================================
+   BASE / LAYOUT GENERAL
+   ============================================================ */
 * { box-sizing: border-box; }
 
+html, body { height: 100%; }
+
 body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
     font-family: "Segoe UI", Arial, sans-serif;
     background-color: var(--bg);
     color: var(--text);
@@ -47,7 +58,25 @@ body {
     transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+h1, h2 { color: var(--text); }
+
+main {
+    flex: 1;
+    overflow-y: auto;
+    max-width: 960px;
+    margin: 30px auto;
+    padding: 0 20px;
+    width: 100%;
+}
+
+/* ============================================================
+   HEADER (sticky)
+   ============================================================ */
 header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    flex-shrink: 0;
     background: linear-gradient(135deg, var(--header-grad-1), var(--header-grad-2));
     color: white;
     padding: 22px 40px;
@@ -57,11 +86,23 @@ header {
 header h1 { margin: 0; font-size: 22px; letter-spacing: 0.3px; color: white; }
 header .sous-titre { font-size: 13px; color: #cbd5e1; margin-top: 4px; }
 
-main { max-width: 960px; margin: 30px auto; padding: 0 20px; }
+.nav-header { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-h1, h2 { color: var(--text); }
+.btn-nav {
+    display: inline-block; padding: 8px 16px; border-radius: 6px; text-decoration: none;
+    font-size: 14px; font-weight: 600; border: 1.5px solid rgba(255,255,255,0.4); color: white;
+    background-color: rgba(255,255,255,0.08); transition: all 0.15s ease;
+}
+.btn-nav:hover { background-color: rgba(255,255,255,0.2); border-color: white; }
+.btn-nav.actif { background-color: white; color: var(--header-grad-1); border-color: white; }
 
-/* Interrupteur de thème */
+.btn-accueil {
+    display: inline-block; padding: 8px 18px; border-radius: 6px; text-decoration: none;
+    font-size: 14px; font-weight: 600; border: 1.5px solid white; color: white;
+    background-color: transparent; transition: all 0.15s ease;
+}
+.btn-accueil:hover { background-color: white; color: var(--header-grad-1); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+
 .theme-toggle {
     background: rgba(255,255,255,0.1);
     border: 1.5px solid rgba(255,255,255,0.4);
@@ -73,12 +114,11 @@ h1, h2 { color: var(--text); }
     font-weight: 600;
     transition: all 0.2s ease;
 }
+.theme-toggle:hover { background: rgba(255,255,255,0.25); }
 
-.theme-toggle:hover {
-    background: rgba(255,255,255,0.25);
-}
-
-/* Bannières */
+/* ============================================================
+   BANNIERES DE CONFIRMATION / ERREUR
+   ============================================================ */
 .banniere {
     padding: 12px 18px;
     border-radius: 6px;
@@ -102,7 +142,9 @@ h1, h2 { color: var(--text); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Page d'accueil */
+/* ============================================================
+   PAGE D'ACCUEIL
+   ============================================================ */
 .hero {
     text-align: center;
     padding: 40px 0 10px;
@@ -127,7 +169,6 @@ h1, h2 { color: var(--text); }
     box-shadow: 0 1px 3px var(--shadow);
     animation: fadeInUp 0.5s ease;
 }
-
 .stat-card .valeur { font-size: 28px; font-weight: 700; color: var(--primary); }
 .stat-card .label { font-size: 13px; color: var(--text-muted); margin-top: 4px; }
 
@@ -147,10 +188,8 @@ nav.accueil a {
     transition: all 0.2s ease;
     animation: fadeInUp 0.5s ease;
 }
-
 nav.accueil a .icone { display: block; font-size: 30px; margin-bottom: 10px; }
 nav.accueil a .desc { display: block; font-size: 12px; font-weight: 400; color: var(--text-muted); margin-top: 6px; }
-
 nav.accueil a:hover {
     box-shadow: 0 8px 20px rgba(44,123,229,0.25);
     border-color: var(--primary);
@@ -158,6 +197,9 @@ nav.accueil a:hover {
     color: var(--primary);
 }
 
+/* ============================================================
+   BARRE D'ACTIONS (recherche + bouton ajouter)
+   ============================================================ */
 .actions { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 
 .btn {
@@ -167,18 +209,38 @@ nav.accueil a:hover {
 }
 .btn:hover { background-color: var(--primary-dark); box-shadow: 0 4px 10px rgba(44,123,229,0.35); transform: translateY(-1px); }
 
+form.recherche { display: flex; gap: 8px; }
+form.recherche input[type="text"] {
+    padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; width: 220px;
+    background-color: var(--bg-card); color: var(--text); transition: border-color 0.15s ease;
+}
+form.recherche input[type="text"]:focus { outline: none; border-color: var(--primary); }
+
+/* ============================================================
+   TABLEAUX + SCROLL INTERNE
+   ============================================================ */
+.table-scroll {
+    max-height: calc(100vh - 260px);
+    overflow-y: auto;
+    border-radius: 8px;
+}
+
 table {
     width: 100%; border-collapse: collapse; background-color: var(--bg-card);
     box-shadow: 0 1px 3px var(--shadow); border-radius: 8px; overflow: hidden;
     animation: fadeInUp 0.4s ease;
+    margin: 0;
 }
 
 th, td { padding: 11px 14px; text-align: left; border-bottom: 1px solid var(--border); }
-th { background-color: rgba(128,128,128,0.08); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-muted); }
+th {
+    background-color: rgba(128,128,128,0.08); font-weight: 700; font-size: 13px;
+    text-transform: uppercase; letter-spacing: 0.4px; color: var(--text-muted);
+    position: sticky; top: 0; z-index: 10;
+}
 tr { transition: background-color 0.15s ease; }
 tr:hover { background-color: rgba(44,123,229,0.06); }
 
-/* État vide de tableau */
 .vide {
     text-align: center;
     padding: 40px 20px;
@@ -186,6 +248,9 @@ tr:hover { background-color: rgba(44,123,229,0.06); }
 }
 .vide .icone { font-size: 36px; display: block; margin-bottom: 10px; }
 
+/* ============================================================
+   BOUTONS D'ACTION (Modifier / Supprimer / Retour)
+   ============================================================ */
 a.action-link {
     display: inline-block; padding: 6px 14px; border-radius: 6px; text-decoration: none;
     margin-right: 6px; font-size: 13px; font-weight: 600; border: 1.5px solid var(--primary);
@@ -195,30 +260,29 @@ a.action-link:hover { background-color: var(--primary); color: white; box-shadow
 a.action-link.delete { border-color: var(--danger); color: var(--danger); }
 a.action-link.delete:hover { background-color: var(--danger); color: white; box-shadow: 0 3px 8px rgba(229,72,77,0.3); }
 
-.btn-accueil {
-    display: inline-block; padding: 8px 18px; border-radius: 6px; text-decoration: none;
-    font-size: 14px; font-weight: 600; border: 1.5px solid white; color: white;
-    background-color: transparent; transition: all 0.15s ease;
+.btn-retour {
+    display: inline-block;
+    margin-top: 22px;
+    padding: 9px 18px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    border: 1.5px solid var(--text-muted);
+    color: var(--text-muted);
+    background-color: transparent;
+    transition: all 0.15s ease;
 }
-.btn-accueil:hover { background-color: white; color: var(--header-grad-1); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
-
-.nav-header { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-
-.btn-nav {
-    display: inline-block; padding: 8px 16px; border-radius: 6px; text-decoration: none;
-    font-size: 14px; font-weight: 600; border: 1.5px solid rgba(255,255,255,0.4); color: white;
-    background-color: rgba(255,255,255,0.08); transition: all 0.15s ease;
+.btn-retour:hover {
+    background-color: var(--text-muted);
+    color: var(--bg-card);
+    box-shadow: 0 3px 8px var(--shadow);
+    transform: translateY(-1px);
 }
-.btn-nav:hover { background-color: rgba(255,255,255,0.2); border-color: white; }
-.btn-nav.actif { background-color: white; color: var(--header-grad-1); border-color: white; }
 
-form.recherche { display: flex; gap: 8px; }
-form.recherche input[type="text"] {
-    padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; width: 220px;
-    background-color: var(--bg-card); color: var(--text); transition: border-color 0.15s ease;
-}
-form.recherche input[type="text"]:focus { outline: none; border-color: var(--primary); }
-
+/* ============================================================
+   FORMULAIRES
+   ============================================================ */
 form.formulaire {
     background-color: var(--bg-card); padding: 28px; border-radius: 10px; border: 1px solid var(--border);
     box-shadow: 0 2px 6px var(--shadow); max-width: 450px; animation: fadeInUp 0.4s ease;
