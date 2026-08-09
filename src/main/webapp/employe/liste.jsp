@@ -4,6 +4,7 @@
 <head>
     <title>Employés - Gestion des affectations</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
+    <script src="${pageContext.request.contextPath}/js/theme.js"></script>
 </head>
 <body>
     <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
@@ -15,7 +16,8 @@
             <a class="btn-nav actif" href="${pageContext.request.contextPath}/employe?action=liste">Employés</a>
             <a class="btn-nav" href="${pageContext.request.contextPath}/lieu?action=liste">Lieux</a>
             <a class="btn-nav" href="${pageContext.request.contextPath}/affecter?action=liste">Affectations</a>
-            <a class="btn-accueil" href="${pageContext.request.contextPath}/index.jsp">🏠 Accueil</a>
+            <a class="btn-accueil" href="${pageContext.request.contextPath}/accueil">🏠 Accueil</a>
+            <button class="theme-toggle" onclick="basculerTheme()">🌓 Thème</button>
         </div>
     </header>
     <main>

@@ -118,6 +118,10 @@ public class AffecterDAO {
         }
     }
 
+    public List<Affecter> listerTous() {
+        return listerTous(null);
+    }
+
     public List<Affecter> listerParEmploye(Integer codeemp) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Query<Affecter> query = session.createQuery(
