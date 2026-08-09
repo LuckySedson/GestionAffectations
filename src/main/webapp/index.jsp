@@ -14,63 +14,53 @@
         </div>
         <button class="theme-toggle" onclick="basculerTheme()">🌓 Thème</button>
     </header>
-    <main>
-        <div class="hero">
-            <h1>Bienvenue 👋</h1>
-            <p>Gérez vos employés, vos lieux et leurs affectations en toute simplicité.</p>
-        </div>
 
-        <div class="stats">
-            <div class="stat-card">
-                <div class="valeur">${nbEmployes}</div>
-                <div class="label">Employés enregistrés</div>
-            </div>
-            <div class="stat-card">
-                <div class="valeur">${nbLieux}</div>
-                <div class="label">Lieux disponibles</div>
-            </div>
-            <div class="stat-card">
-                <div class="valeur">${nbAffectations}</div>
-                <div class="label">Affectations en cours</div>
-            </div>
-        </div>
-
-        <div class="dashboard">
-            <div class="graphique-carte">
-                <h2>Affectations par lieu</h2>
-                <canvas id="graphLieux"></canvas>
-            </div>
-            <div class="graphique-carte">
-                <h2>Employés par poste</h2>
-                <canvas id="graphPostes"></canvas>
-            </div>
-        </div>
-
+    <main class="accueil-page">
         <nav class="accueil">
             <ul>
                 <li>
                     <a href="${pageContext.request.contextPath}/employe?action=liste">
                         <span class="icone">👤</span>
-                        Employés
-                        <span class="desc">Gérer les employés</span>
+                        <span class="infos">
+                            <span class="titre-carte">Employés</span>
+                            <span class="desc">Gérer les employés</span>
+                        </span>
+                        <span class="badge">${nbEmployes}</span>
                     </a>
                 </li>
                 <li>
                     <a href="${pageContext.request.contextPath}/lieu?action=liste">
                         <span class="icone">📍</span>
-                        Lieux
-                        <span class="desc">Gérer les lieux</span>
+                        <span class="infos">
+                            <span class="titre-carte">Lieux</span>
+                            <span class="desc">Gérer les lieux</span>
+                        </span>
+                        <span class="badge">${nbLieux}</span>
                     </a>
                 </li>
                 <li>
                     <a href="${pageContext.request.contextPath}/affecter?action=liste">
                         <span class="icone">🔗</span>
-                        Affectations
-                        <span class="desc">Gérer les affectations</span>
+                        <span class="infos">
+                            <span class="titre-carte">Affectations</span>
+                            <span class="desc">Gérer les affectations</span>
+                        </span>
+                        <span class="badge">${nbAffectations}</span>
                     </a>
                 </li>
             </ul>
         </nav>
+
+        <div class="dashboard">
+            <div class="graphique-carte">
+                <h2>📊 Affectations par lieu</h2>
+                <canvas id="graphLieux"></canvas>
+            </div>
+            <div class="graphique-carte">
+                <h2>📊 Employés par poste</h2>
+                <canvas id="graphPostes"></canvas>
+            </div>
+        </div>
     </main>
 
     <script>
@@ -87,7 +77,8 @@
                 }]
             },
             options: {
-                plugins: { legend: { labels: { color: couleurTexte } } }
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { color: couleurTexte, boxWidth: 14, font: { size: 13 } } } }
             }
         });
 
@@ -98,14 +89,16 @@
                 datasets: [{
                     label: 'Nombre d\'employés',
                     data: ${valeursPostes},
-                    backgroundColor: '#2c7be5'
+                    backgroundColor: '#2c7be5',
+                    borderRadius: 6
                 }]
             },
             options: {
+                maintainAspectRatio: false,
                 plugins: { legend: { display: false } },
                 scales: {
-                    x: { ticks: { color: couleurTexte } },
-                    y: { ticks: { color: couleurTexte }, beginAtZero: true }
+                    x: { ticks: { color: couleurTexte, font: { size: 12 } } },
+                    y: { ticks: { color: couleurTexte, font: { size: 12 } }, beginAtZero: true }
                 }
             }
         });

@@ -420,3 +420,97 @@ form.formulaire button:hover {
 @media (max-width: 700px) {
     .dashboard { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   PAGE D'ACCUEIL — NAVIGATION COMPACTE + GRAPHIQUES EN AVANT
+   ============================================================ */
+main.accueil-page {
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 14px auto;
+    max-height: calc(100vh - 90px);
+    height: calc(100vh - 90px);
+}
+
+/* Cartes de navigation compactes, horizontales, avec badge de comptage */
+main.accueil-page nav.accueil ul {
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+main.accueil-page nav.accueil a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    text-align: left;
+}
+
+main.accueil-page nav.accueil a .icone {
+    font-size: 22px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+main.accueil-page nav.accueil a .infos {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+main.accueil-page nav.accueil a .titre-carte {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+main.accueil-page nav.accueil a .desc {
+    font-size: 11px;
+    margin-top: 1px;
+}
+
+main.accueil-page nav.accueil a .badge {
+    flex-shrink: 0;
+    background-color: rgba(44,123,229,0.12);
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 15px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    transition: all 0.15s ease;
+}
+
+main.accueil-page nav.accueil a:hover .badge {
+    background-color: var(--primary);
+    color: white;
+}
+
+/* Dashboard = zone principale, prend tout l'espace restant */
+main.accueil-page .dashboard {
+    margin: 0;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+}
+
+main.accueil-page .graphique-carte {
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+main.accueil-page .graphique-carte h2 {
+    margin: 0 0 10px;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+
+main.accueil-page .graphique-carte canvas {
+    flex: 1;
+    max-height: none;
+    min-height: 0;
+    width: 100% !important;
+}
