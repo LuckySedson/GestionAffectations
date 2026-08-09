@@ -6,12 +6,17 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
 </head>
 <body>
-    <header style="display:flex; justify-content:space-between; align-items:center;">
+    <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
         <div>
             <h1>Liste des lieux</h1>
             <div class="sous-titre">Consulter, ajouter ou modifier un lieu</div>
         </div>
-        <a class="btn-accueil" href="${pageContext.request.contextPath}/index.jsp">🏠 Accueil</a>
+        <div class="nav-header">
+            <a class="btn-nav" href="${pageContext.request.contextPath}/employe?action=liste">Employés</a>
+            <a class="btn-nav actif" href="${pageContext.request.contextPath}/lieu?action=liste">Lieux</a>
+            <a class="btn-nav" href="${pageContext.request.contextPath}/affecter?action=liste">Affectations</a>
+            <a class="btn-accueil" href="${pageContext.request.contextPath}/index.jsp">🏠 Accueil</a>
+        </div>
     </header>
     <main>
         <%@ include file="/WEB-INF/jspf/banniere.jspf" %>
