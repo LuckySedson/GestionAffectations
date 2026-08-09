@@ -131,4 +131,15 @@ public class AffecterDAO {
             return query.getResultList();
         }
     }
+
+    public List<Object[]> compterParLieu() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Object[]> query = session.createQuery(
+                    "SELECT l.designation, COUNT(a) FROM Affecter a JOIN a.lieu l GROUP BY l.designation",
+                    Object[].class);
+            return query.getResultList();
+        } catch (RuntimeException ex) {
+            throw new AccesDonneesException("Impossible de contacter la base de données.", ex);
+        }
+    }
 }

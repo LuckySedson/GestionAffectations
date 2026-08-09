@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
@@ -14,42 +14,51 @@
         </div>
         <button class="theme-toggle" onclick="basculerTheme()">🌓 Thème</button>
     </header>
-    <main>
-        <form class="formulaire" action="${pageContext.request.contextPath}/affecter" method="post">
 
-            <c:if test="${not empty affectation}">
-                <input type="hidden" name="ancienCodeemp" value="${affectation.id.codeemp}"/>
-                <input type="hidden" name="ancienCodelieu" value="${affectation.id.codelieu}"/>
-                <input type="hidden" name="ancienneDate" value="${affectation.id.date}"/>
-            </c:if>
+    <div class="page-formulaire">
+        <div class="carte-formulaire">
+            <span class="icone-form">🔗</span>
+            <h1>${empty affectation ? "Ajouter" : "Modifier"} une affectation</h1>
+            <div class="sous-titre-form">Tous les champs sont requis</div>
 
-            <label>Employé</label>
-            <select name="codeemp" required>
-                <c:forEach var="emp" items="${employes}">
-                    <option value="${emp.codeemp}"
-                        ${not empty affectation && affectation.employe.codeemp == emp.codeemp ? 'selected' : ''}>
-                        ${emp.nom} ${emp.prenom}
-                    </option>
-                </c:forEach>
-            </select>
+            <form class="formulaire" action="${pageContext.request.contextPath}/affecter" method="post">
 
-            <label>Lieu</label>
-            <select name="codelieu" required>
-                <c:forEach var="l" items="${lieux}">
-                    <option value="${l.codelieu}"
-                        ${not empty affectation && affectation.lieu.codelieu == l.codelieu ? 'selected' : ''}>
-                        ${l.designation}
-                    </option>
-                </c:forEach>
-            </select>
+                <c:if test="${not empty affectation}">
+                    <input type="hidden" name="ancienCodeemp" value="${affectation.id.codeemp}"/>
+                    <input type="hidden" name="ancienCodelieu" value="${affectation.id.codelieu}"/>
+                    <input type="hidden" name="ancienneDate" value="${affectation.id.date}"/>
+                </c:if>
 
-            <label>Date</label>
-            <input type="date" name="date" value="${affectation.id.date}" required/>
+                <label>Employé</label>
+                <select name="codeemp" required>
+                    <c:forEach var="emp" items="${employes}">
+                        <option value="${emp.codeemp}"
+                            ${not empty affectation && affectation.employe.codeemp == emp.codeemp ? 'selected' : ''}>
+                            ${emp.nom} ${emp.prenom}
+                        </option>
+                    </c:forEach>
+                </select>
 
-            <button type="submit">Enregistrer</button>
-        </form>
+                <label>Lieu</label>
+                <select name="codelieu" required>
+                    <c:forEach var="l" items="${lieux}">
+                        <option value="${l.codelieu}"
+                            ${not empty affectation && affectation.lieu.codelieu == l.codelieu ? 'selected' : ''}>
+                            ${l.designation}
+                        </option>
+                    </c:forEach>
+                </select>
 
-        <a class="btn-retour" href="${pageContext.request.contextPath}/employe?action=liste">← Retour à la liste</a>
-    </main>
+                <label>Date</label>
+                <input type="date" name="date" value="${affectation.id.date}" required/>
+
+                <button type="submit">Enregistrer</button>
+            </form>
+
+            <div class="retour-centre">
+                <a class="btn-retour" href="${pageContext.request.contextPath}/affecter?action=liste">← Retour à la liste</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

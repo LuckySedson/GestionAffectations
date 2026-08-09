@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet("/accueil")
 public class HomeServlet extends HttpServlet {
@@ -26,6 +27,30 @@ public class HomeServlet extends HttpServlet {
         req.setAttribute("nbLieux", lieuDAO.listerTous().size());
         req.setAttribute("nbAffectations", affecterDAO.listerTous().size());
 
+        req.setAttribute("labelsLieux", construireJsonLabels(affecterDAO.compterParLieu()));
+        req.setAttribute("valeursLieux", construireJsonValeurs(affecterDAO.compterParLieu()));
+
+        req.setAttribute("labelsPostes", construireJsonLabels(employeDAO.compterParPoste()));
+        req.setAttribute("valeursPostes", construireJsonValeurs(employeDAO.compterParPoste()));
+
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
+    }
+
+    private String construireJsonLabels(List<Object[]> lignes) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < lignes.size(); i++) {
+            if (i > 0) sb.append(",");
+            sb.append("\"").append(lignes.get(i)[0]).append("\"");
+        }
+        return sb.append("]").toString();
+    }
+
+    private String construireJsonValeurs(List<Object[]> lignes) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < lignes.size(); i++) {
+            if (i > 0) sb.append(",");
+            sb.append(lignes.get(i)[1]);
+        }
+        return sb.append("]").toString();
     }
 }

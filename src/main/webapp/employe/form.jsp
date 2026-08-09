@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
     <title>${empty employe ? "Ajouter" : "Modifier"} un employé</title>
@@ -13,23 +13,32 @@
         </div>
         <button class="theme-toggle" onclick="basculerTheme()">🌓 Thème</button>
     </header>
-    <main>
-        <form class="formulaire" action="${pageContext.request.contextPath}/employe" method="post">
-            <input type="hidden" name="codeemp" value="${employe.codeemp}"/>
 
-            <label>Nom</label>
-            <input type="text" name="nom" value="${employe.nom}" required/>
+    <div class="page-formulaire">
+        <div class="carte-formulaire">
+            <span class="icone-form">👤</span>
+            <h1>${empty employe ? "Ajouter" : "Modifier"} un employé</h1>
+            <div class="sous-titre-form">Tous les champs marqués sont requis</div>
 
-            <label>Prénom</label>
-            <input type="text" name="prenom" value="${employe.prenom}"/>
+            <form class="formulaire" action="${pageContext.request.contextPath}/employe" method="post">
+                <input type="hidden" name="codeemp" value="${employe.codeemp}"/>
 
-            <label>Poste</label>
-            <input type="text" name="poste" value="${employe.poste}"/>
+                <label>Nom</label>
+                <input type="text" name="nom" value="${employe.nom}" required/>
 
-            <button type="submit">Enregistrer</button>
-        </form>
+                <label>Prénom</label>
+                <input type="text" name="prenom" value="${employe.prenom}"/>
 
-        <a class="btn-retour" href="${pageContext.request.contextPath}/employe?action=liste">← Retour à la liste</a>
-    </main>
+                <label>Poste</label>
+                <input type="text" name="poste" value="${employe.poste}"/>
+
+                <button type="submit">Enregistrer</button>
+            </form>
+
+            <div class="retour-centre">
+                <a class="btn-retour" href="${pageContext.request.contextPath}/employe?action=liste">← Retour à la liste</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

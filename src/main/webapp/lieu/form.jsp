@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <html>
 <head>
     <title>${empty lieu ? "Ajouter" : "Modifier"} un lieu</title>
@@ -13,20 +13,29 @@
         </div>
         <button class="theme-toggle" onclick="basculerTheme()">🌓 Thème</button>
     </header>
-    <main>
-        <form class="formulaire" action="${pageContext.request.contextPath}/lieu" method="post">
-            <input type="hidden" name="codelieu" value="${lieu.codelieu}"/>
 
-            <label>Désignation</label>
-            <input type="text" name="designation" value="${lieu.designation}" required/>
+    <div class="page-formulaire">
+        <div class="carte-formulaire">
+            <span class="icone-form">📍</span>
+            <h1>${empty lieu ? "Ajouter" : "Modifier"} un lieu</h1>
+            <div class="sous-titre-form">Tous les champs marqués sont requis</div>
 
-            <label>Province</label>
-            <input type="text" name="province" value="${lieu.province}"/>
+            <form class="formulaire" action="${pageContext.request.contextPath}/lieu" method="post">
+                <input type="hidden" name="codelieu" value="${lieu.codelieu}"/>
 
-            <button type="submit">Enregistrer</button>
-        </form>
+                <label>Désignation</label>
+                <input type="text" name="designation" value="${lieu.designation}" required/>
 
-        <a class="btn-retour" href="${pageContext.request.contextPath}/employe?action=liste">← Retour à la liste</a>
-    </main>
+                <label>Province</label>
+                <input type="text" name="province" value="${lieu.province}"/>
+
+                <button type="submit">Enregistrer</button>
+            </form>
+
+            <div class="retour-centre">
+                <a class="btn-retour" href="${pageContext.request.contextPath}/lieu?action=liste">← Retour à la liste</a>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

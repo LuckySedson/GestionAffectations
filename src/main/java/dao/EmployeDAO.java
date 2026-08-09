@@ -82,4 +82,15 @@ public class EmployeDAO {
             throw new AccesDonneesException("Impossible de contacter la base de données.", ex);
         }
     }
+
+    public List<Object[]> compterParPoste() {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Object[]> query = session.createQuery(
+                    "SELECT COALESCE(e.poste, 'Non renseigné'), COUNT(e) FROM Employe e GROUP BY e.poste",
+                    Object[].class);
+            return query.getResultList();
+        } catch (RuntimeException ex) {
+            throw new AccesDonneesException("Impossible de contacter la base de données.", ex);
+        }
+    }
 }
