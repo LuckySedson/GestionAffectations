@@ -3,11 +3,15 @@
 <head>
     <title>${empty employe ? "Ajouter" : "Modifier"} un employé</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
+    <script src="${pageContext.request.contextPath}/js/theme.js"></script>
 </head>
 <body>
-    <header>
-        <h1>${empty employe ? "Ajouter" : "Modifier"} un employé</h1>
-        <div class="sous-titre">Renseignez les informations ci-dessous</div>
+    <header style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <h1>${empty employe ? "Ajouter" : "Modifier"} un employé</h1>
+            <div class="sous-titre">Renseignez les informations ci-dessous</div>
+        </div>
+        <button class="theme-toggle" onclick="basculerTheme()">🌓 Thème</button>
     </header>
     <main>
         <form class="formulaire" action="${pageContext.request.contextPath}/employe" method="post">

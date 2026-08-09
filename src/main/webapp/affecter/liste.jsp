@@ -33,32 +33,42 @@
             <a href="${pageContext.request.contextPath}/affecter?action=formAjout" class="btn">+ Ajouter une affectation</a>
         </div>
 
-        <table>
-            <tr>
-                <th>Employé</th>
-                <th>Lieu</th>
-                <th>
-                    Date
-                    <a href="${pageContext.request.contextPath}/affecter?action=liste&tri=asc" style="font-size:11px; text-decoration:none;">▲</a>
-                    <a href="${pageContext.request.contextPath}/affecter?action=liste&tri=desc" style="font-size:11px; text-decoration:none;">▼</a>
-                </th>
-                <th>Actions</th>
-            </tr>
-            <c:forEach var="a" items="${affectations}">
-                <tr>
-                    <td>${a.employe.nom} ${a.employe.prenom}</td>
-                    <td>${a.lieu.designation}</td>
-                    <td>${a.id.date}</td>
-                    <td>
-                        <a class="action-link"
-                           href="${pageContext.request.contextPath}/affecter?action=formModif&codeemp=${a.id.codeemp}&codelieu=${a.id.codelieu}&date=${a.id.date}">Modifier</a>
-                        <a class="action-link delete"
-                           href="${pageContext.request.contextPath}/affecter?action=supprimer&codeemp=${a.id.codeemp}&codelieu=${a.id.codelieu}&date=${a.id.date}"
-                           onclick="return confirm('Confirmer la suppression de cette affectation ?');">Supprimer</a>
-                    </td>
-                </tr>
-            </c:forEach>
-        </table>
+        <c:choose>
+            <c:when test="${empty affectations}">
+                <div class="vide">
+                    <span class="icone">📭</span>
+                    Aucune affectation trouvée.
+                </div>
+            </c:when>
+            <c:otherwise>
+                <table>
+                    <tr>
+                        <th>Employé</th>
+                        <th>Lieu</th>
+                        <th>
+                            Date
+                            <a href="${pageContext.request.contextPath}/affecter?action=liste&tri=asc" style="font-size:11px; text-decoration:none;">▲</a>
+                            <a href="${pageContext.request.contextPath}/affecter?action=liste&tri=desc" style="font-size:11px; text-decoration:none;">▼</a>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                    <c:forEach var="a" items="${affectations}">
+                        <tr>
+                            <td>${a.employe.nom} ${a.employe.prenom}</td>
+                            <td>${a.lieu.designation}</td>
+                            <td>${a.id.date}</td>
+                            <td>
+                                <a class="action-link"
+                                   href="${pageContext.request.contextPath}/affecter?action=formModif&codeemp=${a.id.codeemp}&codelieu=${a.id.codelieu}&date=${a.id.date}">Modifier</a>
+                                <a class="action-link delete"
+                                   href="${pageContext.request.contextPath}/affecter?action=supprimer&codeemp=${a.id.codeemp}&codelieu=${a.id.codelieu}&date=${a.id.date}"
+                                   onclick="return confirm('Confirmer la suppression de cette affectation ?');">Supprimer</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+            </c:otherwise>
+        </c:choose>
     </main>
 </body>
 </html>
