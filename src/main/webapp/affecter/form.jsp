@@ -5,6 +5,7 @@
     <title>${empty affectation ? "Ajouter" : "Modifier"} une affectation</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <script src="${pageContext.request.contextPath}/js/theme.js"></script>
+    <script src="${pageContext.request.contextPath}/js/modal.js"></script>
 </head>
 <body>
     <header style="display:flex; justify-content:space-between; align-items:center;">
@@ -24,7 +25,8 @@
             <c:if test="${not empty erreurForm}">
                 <div class="banniere erreur">⚠️ ${erreurForm}</div>
             </c:if>
-            <form class="formulaire" action="${pageContext.request.contextPath}/affecter" method="post">
+            <form class="formulaire" action="${pageContext.request.contextPath}/affecter" method="post"
+                  onsubmit="return confirmerSiDatePassee(event)">
 
                 <c:if test="${not empty affectation}">
                     <input type="hidden" name="ancienCodeemp" value="${affectation.id.codeemp}"/>

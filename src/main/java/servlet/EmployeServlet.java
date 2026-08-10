@@ -47,8 +47,20 @@ public class EmployeServlet extends HttpServlet {
 
                 case "supprimer":
                     Integer codeempSupp = Integer.parseInt(req.getParameter("codeemp"));
+                    Employe employeSupprime = employeDAO.trouverParCode(codeempSupp);
                     employeDAO.supprimer(codeempSupp);
+                    req.getSession().setAttribute("dernierEmployeSupprime", employeSupprime);
                     resp.sendRedirect("employe?action=liste&msg=suppr");
+                    break;
+
+                case "annulerSuppr":
+                    Employe aRestaurer = (Employe) req.getSession().getAttribute("dernierEmployeSupprime");
+                    if (aRestaurer != null) {
+                        Employe nouveau = new Employe(aRestaurer.getNom(), aRestaurer.getPrenom(), aRestaurer.getPoste());
+                        employeDAO.ajouter(nouveau, true); // forcer=true pour éviter un faux avertissement de doublon
+                        req.getSession().removeAttribute("dernierEmployeSupprime");
+                    }
+                    resp.sendRedirect("employe?action=liste&msg=restaure");
                     break;
 
                 case "recherche":

@@ -46,10 +46,21 @@ public class LieuServlet extends HttpServlet {
 
                 case "supprimer":
                     Integer codelieuSupp = Integer.parseInt(req.getParameter("codelieu"));
+                    Lieu lieuSupprime = lieuDAO.trouverParCode(codelieuSupp);
                     lieuDAO.supprimer(codelieuSupp);
+                    req.getSession().setAttribute("dernierLieuSupprime", lieuSupprime);
                     resp.sendRedirect("lieu?action=liste&msg=suppr");
                     break;
 
+                case "annulerSuppr":
+                    Lieu lieuARestaurer = (Lieu) req.getSession().getAttribute("dernierLieuSupprime");
+                    if (lieuARestaurer != null) {
+                        Lieu nouveau = new Lieu(lieuARestaurer.getDesignation(), lieuARestaurer.getProvince());
+                        lieuDAO.ajouter(nouveau);
+                        req.getSession().removeAttribute("dernierLieuSupprime");
+                    }
+                    resp.sendRedirect("lieu?action=liste&msg=restaure");
+                    break;
                 case "recherche":
                     String critere = req.getParameter("critere");
                     req.setAttribute("lieux", lieuDAO.trouverParCritere(critere));

@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import model.Affecter;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -59,8 +60,20 @@ public class AffecterServlet extends HttpServlet {
                     Integer codeemp = Integer.parseInt(req.getParameter("codeemp"));
                     Integer codelieu = Integer.parseInt(req.getParameter("codelieu"));
                     LocalDate date = LocalDate.parse(req.getParameter("date"));
+                    Affecter affectationSupprimee = affecterDAO.trouverParId(codeemp, codelieu, date);
                     affecterDAO.supprimer(codeemp, codelieu, date);
+                    req.getSession().setAttribute("derniereAffectationSupprimee", affectationSupprimee);
                     resp.sendRedirect("affecter?action=liste&msg=suppr");
+                    break;
+
+                case "annulerSuppr":
+                    Affecter aRestaurerAff = (Affecter) req.getSession().getAttribute("derniereAffectationSupprimee");
+                    if (aRestaurerAff != null) {
+                        affecterDAO.ajouter(aRestaurerAff.getEmploye().getCodeemp(),
+                                aRestaurerAff.getLieu().getCodelieu(), aRestaurerAff.getId().getDate());
+                        req.getSession().removeAttribute("derniereAffectationSupprimee");
+                    }
+                    resp.sendRedirect("affecter?action=liste&msg=restaure");
                     break;
 
                 case "recherche":

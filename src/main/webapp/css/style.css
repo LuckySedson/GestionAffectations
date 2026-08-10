@@ -602,3 +602,16 @@ main.accueil-page .graphique-carte canvas {
     color: white;
 }
 .modal-btn-confirmer:hover { box-shadow: 0 4px 10px rgba(229,72,77,0.4); transform: translateY(-1px); }
+
+.lien-annuler {
+    margin-left: 14px;
+    font-weight: 700;
+    text-decoration: underline;
+    color: inherit;
+    cursor: pointer;
+}
+
+.banniere.avec-annuler {
+    animation: none;
+    opacity: 1;
+}

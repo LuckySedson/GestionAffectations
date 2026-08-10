@@ -5,8 +5,12 @@
         <c:choose>
             <c:when test="${param.msg == 'ajout'}">✅ Ajout effectué avec succès.</c:when>
             <c:when test="${param.msg == 'modif'}">✅ Modification effectuée avec succès.</c:when>
-            <c:when test="${param.msg == 'suppr'}">✅ Suppression effectuée avec succès.</c:when>
+            <c:when test="${param.msg == 'restaure'}">✅ Élément restauré avec succès.</c:when>
             <c:when test="${param.msg == 'occupe'}">⚠️ Suppression impossible : cet élément est utilisé dans une ou plusieurs affectations.</c:when>
+            <c:when test="${param.msg == 'suppr'}">
+                ✅ Suppression effectuée avec succès.
+                <a href="javascript:void(0)" onclick="annulerDerniereSuppression()" class="lien-annuler">↩ Annuler</a>
+            </c:when>
         </c:choose>
     </div>
 </c:if>
