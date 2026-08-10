@@ -1,6 +1,8 @@
 package dao;
 
 import exception.AccesDonneesException;
+import exception.AvertissementDoublonException;
+import exception.DoublonException;
 import model.Affecter;
 import model.AffecterId;
 import model.Employe;
@@ -18,19 +20,43 @@ public class AffecterDAO {
     public void ajouter(Integer codeemp, Integer codelieu, LocalDate date) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            Query<Long> verifMemeLieu = session.createQuery(
+                    "SELECT COUNT(a) FROM Affecter a WHERE a.employe.codeemp = :codeemp AND a.lieu.codelieu = :codelieu",
+                    Long.class);
+            verifMemeLieu.setParameter("codeemp", codeemp);
+            verifMemeLieu.setParameter("codelieu", codelieu);
+            if (verifMemeLieu.getSingleResult() > 0) {
+                throw new DoublonException("Cet employé est déjà affecté à ce lieu.");
+            }
+
+            Query<Long> verifMemeDate = session.createQuery(
+                    "SELECT COUNT(a) FROM Affecter a WHERE a.employe.codeemp = :codeemp AND a.id.date = :date",
+                    Long.class);
+            verifMemeDate.setParameter("codeemp", codeemp);
+            verifMemeDate.setParameter("date", date);
+            if (verifMemeDate.getSingleResult() > 0) {
+                throw new DoublonException("Cet employé est déjà affecté à un autre lieu à cette date.");
+            }
+
+            if (date.isBefore(LocalDate.now().minusYears(1)) || date.isAfter(LocalDate.now().plusYears(2))) {
+                throw new DoublonException("La date d'affectation (" + date + ") semble incorrecte : trop éloignée dans le temps.");
+            }
+
             tx = session.beginTransaction();
 
             Employe employe = session.get(Employe.class, codeemp);
             Lieu lieu = session.get(Lieu.class, codelieu);
-
             if (employe == null || lieu == null) {
                 throw new IllegalArgumentException("Employé ou lieu introuvable.");
             }
 
             Affecter affecter = new Affecter(employe, lieu, date);
             session.persist(affecter);
-
             tx.commit();
+
+        } catch (DoublonException ex) {
+            throw ex;
         } catch (RuntimeException ex) {
             if (tx != null) tx.rollback();
             throw new AccesDonneesException("Impossible d'ajouter l'affectation.", ex);
@@ -64,6 +90,37 @@ public class AffecterDAO {
                          Integer nouveauCodeemp, Integer nouveauCodelieu, LocalDate nouvelleDate) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            Query<Long> verifMemeLieu = session.createQuery(
+                    "SELECT COUNT(a) FROM Affecter a WHERE a.employe.codeemp = :codeemp AND a.lieu.codelieu = :codelieu " +
+                            "AND NOT (a.employe.codeemp = :ancienCodeemp AND a.lieu.codelieu = :ancienCodelieu AND a.id.date = :ancienneDate)",
+                    Long.class);
+            verifMemeLieu.setParameter("codeemp", nouveauCodeemp);
+            verifMemeLieu.setParameter("codelieu", nouveauCodelieu);
+            verifMemeLieu.setParameter("ancienCodeemp", ancienCodeemp);
+            verifMemeLieu.setParameter("ancienCodelieu", ancienCodelieu);
+            verifMemeLieu.setParameter("ancienneDate", ancienneDate);
+            if (verifMemeLieu.getSingleResult() > 0) {
+                throw new DoublonException("Cet employé est déjà affecté à ce lieu.");
+            }
+
+            Query<Long> verifMemeDate = session.createQuery(
+                    "SELECT COUNT(a) FROM Affecter a WHERE a.employe.codeemp = :codeemp AND a.id.date = :date " +
+                            "AND NOT (a.employe.codeemp = :ancienCodeemp AND a.lieu.codelieu = :ancienCodelieu AND a.id.date = :ancienneDate)",
+                    Long.class);
+            verifMemeDate.setParameter("codeemp", nouveauCodeemp);
+            verifMemeDate.setParameter("date", nouvelleDate);
+            verifMemeDate.setParameter("ancienCodeemp", ancienCodeemp);
+            verifMemeDate.setParameter("ancienCodelieu", ancienCodelieu);
+            verifMemeDate.setParameter("ancienneDate", ancienneDate);
+            if (verifMemeDate.getSingleResult() > 0) {
+                throw new DoublonException("Cet employé est déjà affecté à un autre lieu à cette date.");
+            }
+
+            if (nouvelleDate.isBefore(LocalDate.now().minusYears(1)) || nouvelleDate.isAfter(LocalDate.now().plusYears(2))) {
+                throw new DoublonException("La date d'affectation (" + nouvelleDate + ") semble incorrecte : trop éloignée dans le temps.");
+            }
+
             tx = session.beginTransaction();
 
             AffecterId ancienId = new AffecterId(ancienCodeemp, ancienCodelieu, ancienneDate);
@@ -81,8 +138,10 @@ public class AffecterDAO {
 
             Affecter nouvelle = new Affecter(employe, lieu, nouvelleDate);
             session.persist(nouvelle);
-
             tx.commit();
+
+        } catch (DoublonException ex) {
+            throw ex;
         } catch (RuntimeException ex) {
             if (tx != null) tx.rollback();
             throw new AccesDonneesException("Impossible de modifier l'affectation.", ex);

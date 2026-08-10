@@ -2,6 +2,8 @@ package servlet;
 
 import dao.EmployeDAO;
 import exception.AccesDonneesException;
+import exception.AvertissementDoublonException;
+import exception.DoublonException;
 import exception.SuppressionImpossibleException;
 import model.Employe;
 import jakarta.servlet.ServletException;
@@ -71,16 +73,17 @@ public class EmployeServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        try {
-            String nom = req.getParameter("nom");
-            String prenom = req.getParameter("prenom");
-            String poste = req.getParameter("poste");
-            String codeempStr = req.getParameter("codeemp");
+        String nom = req.getParameter("nom");
+        String prenom = req.getParameter("prenom");
+        String poste = req.getParameter("poste");
+        String codeempStr = req.getParameter("codeemp");
+        boolean forcer = "true".equals(req.getParameter("confirmerDoublon"));
 
+        try {
             String msg;
             if (codeempStr == null || codeempStr.isEmpty()) {
                 Employe e = new Employe(nom, prenom, poste);
-                employeDAO.ajouter(e);
+                employeDAO.ajouter(e, forcer);
                 msg = "ajout";
             } else {
                 Employe e = employeDAO.trouverParCode(Integer.parseInt(codeempStr));
@@ -90,8 +93,13 @@ public class EmployeServlet extends HttpServlet {
                 employeDAO.modifier(e);
                 msg = "modif";
             }
-
             resp.sendRedirect("employe?action=liste&msg=" + msg);
+
+        } catch (AvertissementDoublonException ex) {
+            Employe saisie = new Employe(nom, prenom, poste);
+            req.setAttribute("employe", saisie);
+            req.setAttribute("avertissement", ex.getMessage());
+            req.getRequestDispatcher("/employe/form.jsp").forward(req, resp);
 
         } catch (AccesDonneesException ex) {
             req.setAttribute("erreur", ex.getMessage());

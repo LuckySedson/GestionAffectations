@@ -1,6 +1,8 @@
 package dao;
 
 import exception.AccesDonneesException;
+import exception.AvertissementDoublonException;
+import exception.DoublonException;
 import exception.SuppressionImpossibleException;
 import model.Employe;
 import org.hibernate.Session;
@@ -13,16 +15,34 @@ import java.util.List;
 
 public class EmployeDAO {
 
-    public void ajouter(Employe e) {
+    public void ajouter(Employe e, boolean forcer) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            if (!forcer) {
+                Query<Long> verif = session.createQuery(
+                        "SELECT COUNT(emp) FROM Employe emp WHERE emp.nom = :nom AND emp.prenom = :prenom", Long.class);
+                verif.setParameter("nom", e.getNom());
+                verif.setParameter("prenom", e.getPrenom());
+                if (verif.getSingleResult() > 0) {
+                    throw new AvertissementDoublonException(
+                            "Un employé nommé " + e.getNom() + " " + e.getPrenom() + " existe déjà. Voulez-vous vraiment continuer ?");
+                }
+            }
+
             tx = session.beginTransaction();
             session.persist(e);
             tx.commit();
+        } catch (AvertissementDoublonException ex) {
+            throw ex;
         } catch (RuntimeException ex) {
             if (tx != null) tx.rollback();
             throw new AccesDonneesException("Impossible d'ajouter l'employé.", ex);
         }
+    }
+
+    public void ajouter(Employe e) {
+        ajouter(e, false);
     }
 
     public void modifier(Employe e) {

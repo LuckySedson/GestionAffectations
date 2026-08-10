@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
     <title>${empty lieu ? "Ajouter" : "Modifier"} un lieu</title>
@@ -20,6 +21,9 @@
             <h1>${empty lieu ? "Ajouter" : "Modifier"} un lieu</h1>
             <div class="sous-titre-form">Tous les champs marqués sont requis</div>
 
+            <c:if test="${not empty erreurForm}">
+                <div class="banniere erreur">⚠️ ${erreurForm}</div>
+            </c:if>
             <form class="formulaire" action="${pageContext.request.contextPath}/lieu" method="post">
                 <input type="hidden" name="codelieu" value="${lieu.codelieu}"/>
 

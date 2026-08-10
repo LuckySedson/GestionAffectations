@@ -21,6 +21,9 @@
             <h1>${empty affectation ? "Ajouter" : "Modifier"} une affectation</h1>
             <div class="sous-titre-form">Tous les champs sont requis</div>
 
+            <c:if test="${not empty erreurForm}">
+                <div class="banniere erreur">⚠️ ${erreurForm}</div>
+            </c:if>
             <form class="formulaire" action="${pageContext.request.contextPath}/affecter" method="post">
 
                 <c:if test="${not empty affectation}">

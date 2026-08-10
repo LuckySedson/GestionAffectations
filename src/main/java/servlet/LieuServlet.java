@@ -2,6 +2,7 @@ package servlet;
 
 import dao.LieuDAO;
 import exception.AccesDonneesException;
+import exception.DoublonException;
 import exception.SuppressionImpossibleException;
 import model.Lieu;
 import jakarta.servlet.ServletException;
@@ -70,11 +71,11 @@ public class LieuServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        try {
-            String designation = req.getParameter("designation");
-            String province = req.getParameter("province");
-            String codelieuStr = req.getParameter("codelieu");
+        String designation = req.getParameter("designation");
+        String province = req.getParameter("province");
+        String codelieuStr = req.getParameter("codelieu");
 
+        try {
             String msg;
             if (codelieuStr == null || codelieuStr.isEmpty()) {
                 Lieu l = new Lieu(designation, province);
@@ -87,8 +88,14 @@ public class LieuServlet extends HttpServlet {
                 lieuDAO.modifier(l);
                 msg = "modif";
             }
-
             resp.sendRedirect("lieu?action=liste&msg=" + msg);
+
+        } catch (DoublonException ex) {
+            Lieu saisie = new Lieu(designation, province);
+            saisie.setCodelieu(codelieuStr == null || codelieuStr.isEmpty() ? null : Integer.parseInt(codelieuStr));
+            req.setAttribute("lieu", saisie);
+            req.setAttribute("erreurForm", ex.getMessage());
+            req.getRequestDispatcher("/lieu/form.jsp").forward(req, resp);
 
         } catch (AccesDonneesException ex) {
             req.setAttribute("erreur", ex.getMessage());

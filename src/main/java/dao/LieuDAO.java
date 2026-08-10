@@ -1,6 +1,7 @@
 package dao;
 
 import exception.AccesDonneesException;
+import exception.DoublonException;
 import exception.SuppressionImpossibleException;
 import model.Lieu;
 import org.hibernate.Session;
@@ -16,9 +17,20 @@ public class LieuDAO {
     public void ajouter(Lieu l) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Long> verif = session.createQuery(
+                    "SELECT COUNT(lieu) FROM Lieu lieu WHERE lieu.designation = :d AND lieu.province = :p", Long.class);
+            verif.setParameter("d", l.getDesignation());
+            verif.setParameter("p", l.getProvince());
+            if (verif.getSingleResult() > 0) {
+                throw new DoublonException(
+                        "Le lieu \"" + l.getDesignation() + "\" existe déjà dans la province \"" + l.getProvince() + "\".");
+            }
+
             tx = session.beginTransaction();
             session.persist(l);
             tx.commit();
+        } catch (DoublonException ex) {
+            throw ex;
         } catch (RuntimeException ex) {
             if (tx != null) tx.rollback();
             throw new AccesDonneesException("Impossible d'ajouter le lieu.", ex);
@@ -28,9 +40,23 @@ public class LieuDAO {
     public void modifier(Lieu l) {
         Transaction tx = null;
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+
+            Query<Long> verif = session.createQuery(
+                    "SELECT COUNT(lieu) FROM Lieu lieu WHERE lieu.designation = :d AND lieu.province = :p AND lieu.codelieu != :codelieu",
+                    Long.class);
+            verif.setParameter("d", l.getDesignation());
+            verif.setParameter("p", l.getProvince());
+            verif.setParameter("codelieu", l.getCodelieu());
+            if (verif.getSingleResult() > 0) {
+                throw new DoublonException(
+                        "Le lieu \"" + l.getDesignation() + "\" existe déjà dans la province \"" + l.getProvince() + "\".");
+            }
+
             tx = session.beginTransaction();
             session.merge(l);
             tx.commit();
+        } catch (DoublonException ex) {
+            throw ex;
         } catch (RuntimeException ex) {
             if (tx != null) tx.rollback();
             throw new AccesDonneesException("Impossible de modifier le lieu.", ex);

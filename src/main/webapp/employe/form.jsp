@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <html>
 <head>
     <title>${empty employe ? "Ajouter" : "Modifier"} un employé</title>
@@ -20,8 +21,13 @@
             <h1>${empty employe ? "Ajouter" : "Modifier"} un employé</h1>
             <div class="sous-titre-form">Tous les champs marqués sont requis</div>
 
+            <c:if test="${not empty avertissement}">
+                <div class="banniere erreur">⚠️ ${avertissement}</div>
+            </c:if>
+
             <form class="formulaire" action="${pageContext.request.contextPath}/employe" method="post">
                 <input type="hidden" name="codeemp" value="${employe.codeemp}"/>
+                <input type="hidden" name="confirmerDoublon" value="${not empty avertissement ? 'true' : 'false'}"/>
 
                 <label>Nom</label>
                 <input type="text" name="nom" value="${employe.nom}" required/>
@@ -32,7 +38,7 @@
                 <label>Poste</label>
                 <input type="text" name="poste" value="${employe.poste}"/>
 
-                <button type="submit">Enregistrer</button>
+                <button type="submit">${not empty avertissement ? "Confirmer et enregistrer" : "Enregistrer"}</button>
             </form>
 
             <div class="retour-centre">

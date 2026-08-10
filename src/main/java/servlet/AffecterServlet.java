@@ -4,6 +4,7 @@ import dao.AffecterDAO;
 import dao.EmployeDAO;
 import dao.LieuDAO;
 import exception.AccesDonneesException;
+import exception.DoublonException;
 import exception.SuppressionImpossibleException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -83,11 +84,11 @@ public class AffecterServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
 
-        try {
-            Integer codeemp = Integer.parseInt(req.getParameter("codeemp"));
-            Integer codelieu = Integer.parseInt(req.getParameter("codelieu"));
-            LocalDate date = LocalDate.parse(req.getParameter("date"));
+        Integer codeemp = Integer.parseInt(req.getParameter("codeemp"));
+        Integer codelieu = Integer.parseInt(req.getParameter("codelieu"));
+        LocalDate date = LocalDate.parse(req.getParameter("date"));
 
+        try {
             String ancienCodeempStr = req.getParameter("ancienCodeemp");
             String msg;
 
@@ -99,12 +100,16 @@ public class AffecterServlet extends HttpServlet {
                 Integer ancienCodelieu = Integer.parseInt(req.getParameter("ancienCodelieu"));
                 LocalDate ancienneDate = LocalDate.parse(req.getParameter("ancienneDate"));
 
-                affecterDAO.modifier(ancienCodeemp, ancienCodelieu, ancienneDate,
-                        codeemp, codelieu, date);
+                affecterDAO.modifier(ancienCodeemp, ancienCodelieu, ancienneDate, codeemp, codelieu, date);
                 msg = "modif";
             }
-
             resp.sendRedirect("affecter?action=liste&msg=" + msg);
+
+        } catch (DoublonException ex) {
+            req.setAttribute("employes", employeDAO.listerTous());
+            req.setAttribute("lieux", lieuDAO.listerTous());
+            req.setAttribute("erreurForm", ex.getMessage());
+            req.getRequestDispatcher("/affecter/form.jsp").forward(req, resp);
 
         } catch (AccesDonneesException ex) {
             req.setAttribute("erreur", ex.getMessage());
