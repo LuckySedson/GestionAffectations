@@ -5,6 +5,7 @@
     <title>Employés - Gestion des affectations</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <script src="${pageContext.request.contextPath}/js/theme.js"></script>
+    <script src="${pageContext.request.contextPath}/js/modal.js"></script>
 </head>
 <body>
     <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
@@ -54,8 +55,10 @@
                                 <td>${emp.poste}</td>
                                 <td>
                                     <a class="action-link" href="${pageContext.request.contextPath}/employe?action=formModif&codeemp=${emp.codeemp}">Modifier</a>
-                                    <a class="action-link delete" href="${pageContext.request.contextPath}/employe?action=supprimer&codeemp=${emp.codeemp}"
-                                       onclick="return confirm('Confirmer la suppression de ${emp.nom} ${emp.prenom} ?');">Supprimer</a>
+                                    <a class="action-link delete" href="javascript:void(0)"
+                                       onclick="ouvrirConfirmation('Confirmer la suppression de ${emp.nom} ${emp.prenom} ?', function() {
+                                           window.location.href='${pageContext.request.contextPath}/employe?action=supprimer&codeemp=${emp.codeemp}';
+                                       });">Supprimer</a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -64,5 +67,6 @@
             </c:choose>
         </div>
     </main>
+    <%@ include file="/WEB-INF/jspf/modal.jspf" %>
 </body>
 </html>

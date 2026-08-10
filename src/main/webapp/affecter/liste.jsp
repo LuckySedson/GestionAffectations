@@ -5,6 +5,7 @@
     <title>Affectations - Gestion des affectations</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <script src="${pageContext.request.contextPath}/js/theme.js"></script>
+    <script src="${pageContext.request.contextPath}/js/modal.js"></script>
 </head>
 <body>
     <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
@@ -61,9 +62,10 @@
                                 <td>
                                     <a class="action-link"
                                        href="${pageContext.request.contextPath}/affecter?action=formModif&codeemp=${a.id.codeemp}&codelieu=${a.id.codelieu}&date=${a.id.date}">Modifier</a>
-                                    <a class="action-link delete"
-                                       href="${pageContext.request.contextPath}/affecter?action=supprimer&codeemp=${a.id.codeemp}&codelieu=${a.id.codelieu}&date=${a.id.date}"
-                                       onclick="return confirm('Confirmer la suppression de cette affectation ?');">Supprimer</a>
+                                    <a class="action-link delete" href="#"
+                                       onclick="event.preventDefault(); ouvrirConfirmation('Confirmer la suppression de l\'affectation de ${a.employe.nom} ${a.employe.prenom} au lieu ${a.lieu.designation} ?', function() {
+                                           window.location.href='${pageContext.request.contextPath}/affecter?action=supprimer&codeemp=${a.id.codeemp}&codelieu=${a.id.codelieu}&date=${a.id.date}';
+                                       });">Supprimer</a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -72,5 +74,6 @@
             </c:choose>
         </div>
     </main>
+    <%@ include file="/WEB-INF/jspf/modal.jspf" %>
 </body>
 </html>

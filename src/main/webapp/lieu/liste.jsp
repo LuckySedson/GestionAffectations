@@ -5,6 +5,7 @@
     <title>Lieux - Gestion des affectations</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css"/>
     <script src="${pageContext.request.contextPath}/js/theme.js"></script>
+    <script src="${pageContext.request.contextPath}/js/modal.js"></script>
 </head>
 <body>
     <header style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
@@ -53,8 +54,10 @@
                                 <td>${l.province}</td>
                                 <td>
                                     <a class="action-link" href="${pageContext.request.contextPath}/lieu?action=formModif&codelieu=${l.codelieu}">Modifier</a>
-                                    <a class="action-link delete" href="${pageContext.request.contextPath}/lieu?action=supprimer&codelieu=${l.codelieu}"
-                                       onclick="return confirm('Confirmer la suppression de ${l.designation} ?');">Supprimer</a>
+                                   <a class="action-link delete" href="javascript:void(0)"
+                                      onclick="ouvrirConfirmation('Confirmer la suppression de ${l.designation} ?', function() {
+                                          window.location.href='${pageContext.request.contextPath}/lieu?action=supprimer&codelieu=${l.codelieu}';
+                                      });">Supprimer</a>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -63,5 +66,6 @@
             </c:choose>
         </div>
     </main>
+    <%@ include file="/WEB-INF/jspf/modal.jspf" %>
 </body>
 </html>
