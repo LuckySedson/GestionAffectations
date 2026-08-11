@@ -65,5 +65,6 @@
             </div>
         </div>
     </div>
+    <%@ include file="/WEB-INF/jspf/modal.jspf" %>
 </body>
 </html>
