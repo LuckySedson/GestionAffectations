@@ -27,7 +27,7 @@
         <div class="actions">
             <form class="recherche" action="${pageContext.request.contextPath}/employe" method="get">
                 <input type="hidden" name="action" value="recherche"/>
-                <input type="text" name="critere" placeholder="Rechercher par nom"/>
+                <input type="text" name="critere" placeholder="Rechercher par nom, prénom ou code"/>
                 <button type="submit" class="btn">Rechercher</button>
                 <a href="${pageContext.request.contextPath}/employe?action=liste" class="btn" style="background-color:#6b7280;">↻ Actualiser</a>
             </form>

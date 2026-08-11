@@ -65,7 +65,7 @@ public class EmployeServlet extends HttpServlet {
 
                 case "recherche":
                     String critere = req.getParameter("critere");
-                    List<Employe> resultats = employeDAO.trouverParNom(critere);
+                    List<Employe> resultats = employeDAO.rechercher(critere);
                     req.setAttribute("employes", resultats);
                     req.getRequestDispatcher("/employe/liste.jsp").forward(req, resp);
                     break;

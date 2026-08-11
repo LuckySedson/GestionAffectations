@@ -84,10 +84,25 @@ public class EmployeDAO {
         }
     }
 
-    public List<Employe> trouverParNom(String nom) {
+    public List<Employe> rechercher(String critere) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Employe> query = session.createQuery("FROM Employe WHERE nom LIKE :nom", Employe.class);
-            query.setParameter("nom", "%" + nom + "%");
+
+            String hql = "FROM Employe WHERE nom LIKE :critere OR prenom LIKE :critere";
+            Integer codeRecherche = null;
+
+            try {
+                codeRecherche = Integer.parseInt(critere.trim());
+                hql += " OR codeemp = :code";
+            } catch (NumberFormatException ignore) {
+                // le critère n'est pas un nombre, on ignore la recherche par code
+            }
+
+            Query<Employe> query = session.createQuery(hql, Employe.class);
+            query.setParameter("critere", "%" + critere + "%");
+            if (codeRecherche != null) {
+                query.setParameter("code", codeRecherche);
+            }
+
             return query.getResultList();
         } catch (RuntimeException ex) {
             throw new AccesDonneesException("Impossible de contacter la base de données.", ex);
