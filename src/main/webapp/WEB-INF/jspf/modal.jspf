@@ -6,7 +6,7 @@
         <p id="modal-message"></p>
         <div class="modal-actions">
             <button class="modal-btn-annuler" onclick="fermerConfirmation(false)">Annuler</button>
-            <button class="modal-btn-confirmer" onclick="fermerConfirmation(true)">Supprimer</button>
+            <button class="modal-btn-confirmer" id="modal-btn-confirmer" onclick="fermerConfirmation(true)">Supprimer</button>
         </div>
     </div>
 </div>

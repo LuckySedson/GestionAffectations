@@ -1,7 +1,8 @@
 let callbackConfirmation = null;
 
-function ouvrirConfirmation(message, callback) {
+function ouvrirConfirmation(message, callback, texteBouton) {
     document.getElementById("modal-message").textContent = message;
+    document.getElementById("modal-btn-confirmer").textContent = texteBouton || "Supprimer";
     callbackConfirmation = callback;
     document.getElementById("modal-overlay").classList.add("actif");
 }
@@ -38,7 +39,8 @@ function confirmerSiDatePassee(event) {
             "La date sélectionnée (" + champDate.value + ") est dans le passé. Confirmer malgré tout ?",
             function() {
                 event.target.submit();
-            }
+            },
+            "Confirmer"
         );
         return false;
     }
